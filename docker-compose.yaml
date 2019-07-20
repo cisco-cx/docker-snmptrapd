@@ -1,0 +1,14 @@
+version: "2.4"
+services:
+  snmptrapd:
+    image: docker.io/ciscocx/snmptrapd:${DOCKER_TAG}
+    cap_add:
+    - NET_BIND_SERVICE
+    network_mode: host
+    restart: always
+
+    ## These are optional...
+    # volumes:
+    # - ./snmptrapd/snmp.conf:/etc/snmp/snmp.conf:ro
+    # - ./snmptrapd/snmptrapd.conf:/app/snmptrapd.conf:ro
+    # - ./snmptrapd/filebeat.yml:/app/filebeat.yml:ro
