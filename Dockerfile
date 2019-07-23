@@ -8,18 +8,6 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
     iproute2 net-tools nmap curl wget dnsutils && \
     apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
 
-## Using git shenanigans, install MIBs.
-##
-## ref:
-## - https://stackoverflow.com/a/13738951
-WORKDIR /usr/share/snmp/mibs.snmplabs.com
-RUN git init \
- && git remote add -f origin https://github.com/cisco-kusanagi/mibs.snmplabs.com.git \
- && git config core.sparseCheckout true \
- && echo "pysnmp-with-texts" >> .git/info/sparse-checkout \
- && git pull --depth=1 origin master \
-&& rm -rf .git
-
 # Install tini
 RUN cd /tmp && \
     wget -O tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-static-amd64 && \
