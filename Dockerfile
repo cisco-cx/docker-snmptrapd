@@ -16,7 +16,7 @@ RUN cd /tmp && \
 
 # Install filebeat
 RUN cd /tmp && \
-    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.0.0-linux-x86_64.tar.gz && \
+    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-linux-x86_64.tar.gz && \
     tar xzvf filebeat-* && \
     cp filebeat-*/filebeat /usr/local/bin && \
     mkdir -p /etc/beat && \
