@@ -1,0 +1,58 @@
+---
+kind: pipeline
+name: default
+type: docker
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: snmptrapd_PR
+  image: plugins/docker
+  settings:
+    dry_run: true
+    registry: docker.io
+    repo: ciscocx/snmptrapd
+  when:
+    event:
+    - pull_request
+    ref:
+    - refs/heads/master
+    - refs/tags/*
+
+- name: snmptrapd
+  image: plugins/docker
+  settings:
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    registry: docker.io
+    repo: ciscocx/snmptrapd
+  when:
+    event:
+    - tag
+    - push
+    ref:
+    - refs/heads/master
+    - refs/tags/*
+
+- name: send_notification
+  image: plugins/slack
+  settings:
+    channel: drone-ci
+    icon_url: https://raw.githubusercontent.com/drone/brand/master/logos/png/dark/drone-logo-png-dark-64.png
+    username: Drone CI
+    webhook:
+      from_secret: slack_webhook
+  when:
+    status:
+    - failure
+
+---
+kind: signature
+hmac: 3af7b9ff99e52f37411d5fa0e27a0b35dd3a6e59e639616e102970fecad97647
+
+...
