@@ -34,11 +34,8 @@ RUN set -euo pipefail && \
 # USER app
 
 # All configs relevant to this Dockerfile are kept in /app
-COPY entrypoint.sh .
-COPY supervisor.d ./supervisor.d
-COPY app.sh .
-COPY snmptrapd.conf .
-COPY filebeat.yml .
+COPY supervisor.d /app/supervisor.d
+COPY *.conf *.yml *.sh /app/
 RUN rmdir /etc/supervisor/conf.d && \
     ln -s /app/supervisor.d /etc/supervisor/conf.d && \
     chown -R 1000:1000 -R /app /var/log
