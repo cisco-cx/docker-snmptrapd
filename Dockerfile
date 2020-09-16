@@ -40,6 +40,10 @@ RUN rmdir /etc/supervisor/conf.d && \
     ln -s /app/supervisor.d /etc/supervisor/conf.d && \
     chown -R 1000:1000 -R /app /var/log
 
+# Enable HTTP API
+RUN echo "[inet_http_server]" >> /etc/supervisor/supervisord.conf && \
+    echo "port = localhost:9001" >> /etc/supervisor/supervisord.conf
+
 COPY snmp.conf /etc/snmp/snmp.conf
 
 ENTRYPOINT ["/sbin/tini", "--"]
