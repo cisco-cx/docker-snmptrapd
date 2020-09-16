@@ -3,10 +3,10 @@ FROM debian:buster-slim
 # Install System Programs
 RUN apt-get update && apt-get --no-install-recommends -y install \
     # Add core programs \
-    supervisor syslog-ng ca-certificates coreutils expect git snmp snmptrapd \
-    # Add Debugging Tools (Removable in the future) \
-    iproute2 net-tools nmap curl wget dnsutils && \
-    apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
+    supervisor syslog-ng ca-certificates coreutils expect wget snmp snmptrapd \
+    # Uncomment the line below for Debugging Tools \
+    # iproute2 net-tools nmap curl wget dnsutils htop vim procps \
+    && apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install tini
 RUN cd /tmp && \
