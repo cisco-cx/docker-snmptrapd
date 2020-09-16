@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 # Install System Programs
 RUN apt-get update && apt-get --no-install-recommends -y install \
@@ -10,13 +10,13 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
 
 # Install tini
 RUN cd /tmp && \
-    wget -O tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-static-amd64 && \
+    wget -O tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-static-amd64 && \
     chmod 755 tini && \
     mv tini /sbin/tini
 
 # Install filebeat
 RUN cd /tmp && \
-    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-linux-x86_64.tar.gz && \
+    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.9.1-linux-x86_64.tar.gz && \
     tar xzvf filebeat-* && \
     cp filebeat-*/filebeat /usr/local/bin && \
     mkdir -p /etc/beat && \
