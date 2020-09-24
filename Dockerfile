@@ -1,22 +1,22 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 # Install System Programs
 RUN apt-get update && apt-get --no-install-recommends -y install \
     # Add core programs \
-    supervisor syslog-ng ca-certificates coreutils expect git snmp snmptrapd \
-    # Add Debugging Tools (Removable in the future) \
-    iproute2 net-tools nmap curl wget dnsutils && \
-    apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
+    supervisor syslog-ng ca-certificates coreutils expect wget snmp snmptrapd \
+    # Uncomment the line below for Debugging Tools \
+    # iproute2 net-tools nmap curl wget dnsutils htop vim procps \
+    && apt-get -y clean && apt-get -y autoremove && rm -rf /var/lib/apt/lists/*
 
 # Install tini
 RUN cd /tmp && \
-    wget -O tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-static-amd64 && \
+    wget -O tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-static-amd64 && \
     chmod 755 tini && \
     mv tini /sbin/tini
 
 # Install filebeat
 RUN cd /tmp && \
-    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.2.0-linux-x86_64.tar.gz && \
+    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.9.1-linux-x86_64.tar.gz && \
     tar xzvf filebeat-* && \
     cp filebeat-*/filebeat /usr/local/bin && \
     mkdir -p /etc/beat && \
@@ -34,14 +34,15 @@ RUN set -euo pipefail && \
 # USER app
 
 # All configs relevant to this Dockerfile are kept in /app
-COPY entrypoint.sh .
-COPY supervisor.d ./supervisor.d
-COPY app.sh .
-COPY snmptrapd.conf .
-COPY filebeat.yml .
+COPY supervisor.d /app/supervisor.d
+COPY *.conf *.yml *.sh /app/
 RUN rmdir /etc/supervisor/conf.d && \
     ln -s /app/supervisor.d /etc/supervisor/conf.d && \
     chown -R 1000:1000 -R /app /var/log
+
+# Enable HTTP API
+RUN echo "[inet_http_server]" >> /etc/supervisor/supervisord.conf && \
+    echo "port = localhost:9001" >> /etc/supervisor/supervisord.conf
 
 COPY snmp.conf /etc/snmp/snmp.conf
 

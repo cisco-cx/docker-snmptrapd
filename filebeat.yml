@@ -1,6 +1,6 @@
-"filebeat.inputs":
-- "enabled": true
-  "type": "stdin"
-"output.logstash":
-  "hosts":
+filebeat.inputs:
+- enabled: true
+  type: "stdin"
+output.logstash:
+  hosts:
   - "[::1]:5044"
