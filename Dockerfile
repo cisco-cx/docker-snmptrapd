@@ -36,6 +36,7 @@ RUN set -euo pipefail && \
 # All configs relevant to this Dockerfile are kept in /app
 COPY supervisor.d /app/supervisor.d
 COPY *.conf *.yml *.sh /app/
+COPY conf /app/conf
 RUN rmdir /etc/supervisor/conf.d && \
     ln -s /app/supervisor.d /etc/supervisor/conf.d && \
     chown -R 1000:1000 -R /app /var/log
